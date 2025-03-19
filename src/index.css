@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,6 +99,82 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-pathway-darkGray font-sans antialiased;
   }
+
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white bg-opacity-10 backdrop-blur-lg border border-white border-opacity-20 shadow-glass rounded-xl;
+  }
+  
+  .btn-primary {
+    @apply bg-pathway-green text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:translate-y-[-2px] active:translate-y-[0px];
+  }
+  
+  .btn-secondary {
+    @apply bg-white bg-opacity-10 backdrop-blur-md border border-white border-opacity-20 text-pathway-navy px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:shadow-lg hover:bg-opacity-20 active:bg-opacity-15;
+  }
+  
+  .section-title {
+    @apply text-3xl md:text-4xl font-display font-semibold mb-4 text-pathway-navy;
+  }
+  
+  .section-subtitle {
+    @apply text-lg text-gray-600 max-w-3xl mx-auto mb-12;
+  }
+  
+  .reveal-animation {
+    @apply opacity-0;
+  }
+  
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .animated-underline {
+    @apply relative inline-block cursor-pointer;
+  }
+  
+  .animated-underline::after {
+    @apply content-[''] absolute w-full h-[2px] bg-pathway-green left-0 bottom-0 transform scale-x-0 origin-bottom-right transition-transform duration-300 ease-out;
+  }
+  
+  .animated-underline:hover::after {
+    @apply transform scale-x-100 origin-bottom-left;
+  }
+}
+
+/* Custom animations for specific elements */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Luxury scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for luxury feel */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(245, 245, 245, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(169, 169, 169, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.7);
 }
