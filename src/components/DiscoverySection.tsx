@@ -7,38 +7,38 @@ const DiscoverySection = () => {
   
   const cards = [
     {
-      icon: <Compass className="w-8 h-8 text-pathway-navy" />,
+      icon: <Compass className="w-8 h-8 text-pathway-green" />,
       title: "Discover Your Path",
       description: "Our AI-driven assessment helps you uncover your unique strengths, interests, and potential career pathways aligned with your passions."
     },
     {
-      icon: <Lightbulb className="w-8 h-8 text-pathway-navy" />,
+      icon: <Lightbulb className="w-8 h-8 text-pathway-green" />,
       title: "Personalized Insights",
       description: "Receive detailed insights about your natural talents and how they can be developed into marketable skills in today's economy."
     },
     {
-      icon: <Target className="w-8 h-8 text-pathway-navy" />,
+      icon: <Target className="w-8 h-8 text-pathway-green" />,
       title: "Actionable Steps",
       description: "Get a clear roadmap with practical steps to develop your skills and begin monetizing them, regardless of your starting point."
     },
     {
-      icon: <Sparkles className="w-8 h-8 text-pathway-navy" />,
+      icon: <Sparkles className="w-8 h-8 text-pathway-green" />,
       title: "Expert Guidance",
       description: "Access guidance from successful mentors who have turned their passions into profitable careers in various industries."
     }
   ];
 
   return (
-    <section id="discover" className="section-padding bg-pathway-lightGray" ref={animationRef}>
+    <section id="discover" className="section-padding bg-pathway-offWhite" ref={animationRef}>
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
           <span className="inline-block text-pathway-green font-medium text-sm uppercase tracking-wider mb-3 reveal-animation" data-animation="animate-fade-in">
             Self-Discovery Journey
           </span>
-          <h2 className="section-title reveal-animation" data-animation="animate-fade-in">
+          <h2 className="section-title text-pathway-navy reveal-animation" data-animation="animate-fade-in">
             Unlock Your Potential
           </h2>
-          <p className="section-subtitle reveal-animation" data-animation="animate-fade-in">
+          <p className="section-subtitle text-pathway-mediumGray reveal-animation" data-animation="animate-fade-in">
             Our comprehensive self-discovery approach helps you identify your unique strengths and shows you how to transform them into valuable skills.
           </p>
         </div>
@@ -51,13 +51,13 @@ const DiscoverySection = () => {
               data-animation="animate-scale"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div className="bg-pathway-lightGray p-3 rounded-lg inline-block mb-5">
+              <div className="bg-pathway-offWhite p-3 rounded-lg inline-block mb-5">
                 {card.icon}
               </div>
               <h3 className="text-xl font-semibold mb-3 text-pathway-navy">
                 {card.title}
               </h3>
-              <p className="text-gray-600">
+              <p className="text-pathway-mediumGray">
                 {card.description}
               </p>
             </div>

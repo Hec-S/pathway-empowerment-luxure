@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -63,13 +62,19 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-        // Custom colors for our design
         pathway: {
-          navy: "#0A2342",
-          gold: "#E3C795",
+          navy: "#0A0A0A",
+          dark: "#1A1A1A",
+          charcoal: "#2A2A2A",
+          mediumGray: "#4A4A4A",
+          gray: "#767676",
+          lightGray: "#AFAFAF",
+          silver: "#D3D3D3",
+          offWhite: "#F0F0F0",
           green: "#4CAF50",
-          lightGray: "#F5F5F5",
-          darkGray: "#333333",
+          lightGreen: "#8BC34A",
+          darkGreen: "#2E7D32",
+          gold: "#E3C795"
         }
 			},
 			borderRadius: {
