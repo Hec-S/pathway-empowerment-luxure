@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { z } from "zod";
@@ -77,7 +76,6 @@ const Auth = () => {
       if (error) {
         setAuthError(error.message);
       } else {
-        // Switch to login mode after successful signup
         setMode('login');
       }
     } catch (error: any) {
@@ -85,7 +83,6 @@ const Auth = () => {
     }
   };
 
-  // Redirect if user is already logged in
   if (user) {
     return <Navigate to="/" />;
   }
@@ -195,6 +192,7 @@ const Auth = () => {
                   </FormItem>
                 )}
               />
+              
               <FormField
                 control={signupForm.control}
                 name="email"
@@ -215,6 +213,7 @@ const Auth = () => {
                   </FormItem>
                 )}
               />
+              
               <FormField
                 control={signupForm.control}
                 name="password"
@@ -236,6 +235,7 @@ const Auth = () => {
                   </FormItem>
                 )}
               />
+              
               <FormField
                 control={signupForm.control}
                 name="confirmPassword"
@@ -257,9 +257,11 @@ const Auth = () => {
                   </FormItem>
                 )}
               />
+              
               <Button type="submit" className="w-full bg-pathway-green hover:bg-pathway-green/90">
                 Create Account <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
+              
               <div className="text-center mt-4">
                 <p className="text-sm text-gray-600">
                   Already have an account?{" "}
