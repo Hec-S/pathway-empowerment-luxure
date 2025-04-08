@@ -1,4 +1,3 @@
-
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,7 +9,6 @@ interface AuthState {
   user: User | null;
   profile: any | null;
   isLoading: boolean;
-  signUp: (username: string, email: string, password: string) => Promise<{ error: any | null }>;
   signIn: (email: string, password: string) => Promise<{ error: any | null }>;
   signOut: () => Promise<void>;
 }
@@ -25,14 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
         if (event === 'SIGNED_IN' && currentSession?.user) {
-          // Fetch user profile using setTimeout to avoid deadlocks
           setTimeout(() => {
             fetchProfile(currentSession.user.id);
           }, 0);
@@ -42,7 +38,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
@@ -61,7 +56,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchProfile = async (userId: string) => {
     try {
-      // Fix: Use type-safe approach for table access
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -75,43 +69,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
-    }
-  };
-
-  const signUp = async (username: string, email: string, password: string) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            username,
-          },
-        },
-      });
-
-      if (error) {
-        toast({
-          title: 'Sign up failed',
-          description: error.message,
-          variant: 'destructive',
-        });
-        return { error };
-      }
-
-      toast({
-        title: 'Success!',
-        description: 'Check your email to confirm your account.',
-      });
-      
-      return { error: null };
-    } catch (error: any) {
-      toast({
-        title: 'Sign up failed',
-        description: error.message,
-        variant: 'destructive',
-      });
-      return { error };
     }
   };
 
@@ -160,7 +117,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         profile,
         isLoading,
-        signUp,
         signIn,
         signOut,
       }}
