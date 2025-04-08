@@ -1,3 +1,4 @@
+
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
 import { Session, User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +11,7 @@ interface AuthState {
   profile: any | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any | null }>;
+  signUp: (email: string, password: string, username: string) => Promise<{ error: any | null }>;
   signOut: () => Promise<void>;
 }
 
@@ -105,6 +107,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const signUp = async (email: string, password: string, username: string) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            username,
+          },
+        },
+      });
+
+      if (error) {
+        toast({
+          title: 'Sign up failed',
+          description: error.message,
+          variant: 'destructive',
+        });
+        return { error };
+      }
+
+      toast({
+        title: 'Account created!',
+        description: 'You are now signed up and logged in.',
+      });
+      
+      navigate('/');
+      return { error: null };
+    } catch (error: any) {
+      toast({
+        title: 'Sign up failed',
+        description: error.message,
+        variant: 'destructive',
+      });
+      return { error };
+    }
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
     navigate('/auth');
@@ -118,6 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         profile,
         isLoading,
         signIn,
+        signUp,
         signOut,
       }}
     >
