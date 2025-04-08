@@ -60,20 +60,28 @@ const Auth = () => {
 
   const onLoginSubmit = async (values: z.infer<typeof loginSchema>) => {
     setAuthError(null);
-    const { error } = await signIn(values.email, values.password);
-    if (error) {
-      setAuthError(error.message);
+    try {
+      const { error } = await signIn(values.email, values.password);
+      if (error) {
+        setAuthError(error.message);
+      }
+    } catch (error: any) {
+      setAuthError(error.message || "An error occurred during sign in");
     }
   };
 
   const onSignupSubmit = async (values: z.infer<typeof signupSchema>) => {
     setAuthError(null);
-    const { error } = await signUp(values.email, values.password, values.username);
-    if (error) {
-      setAuthError(error.message);
-    } else {
-      // Switch to login mode after successful signup
-      setMode('login');
+    try {
+      const { error } = await signUp(values.username, values.email, values.password);
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        // Switch to login mode after successful signup
+        setMode('login');
+      }
+    } catch (error: any) {
+      setAuthError(error.message || "An error occurred during sign up");
     }
   };
 
@@ -152,7 +160,10 @@ const Auth = () => {
                   Don't have an account?{" "}
                   <button 
                     type="button" 
-                    onClick={() => setMode('signup')}
+                    onClick={() => {
+                      setMode('signup');
+                      setAuthError(null);
+                    }}
                     className="text-pathway-green hover:underline font-medium"
                   >
                     Sign Up
@@ -177,7 +188,6 @@ const Auth = () => {
                           className="pl-10" 
                           placeholder="johndoe123" 
                           {...field} 
-                          value={field.value || ""}
                         />
                       </div>
                     </FormControl>
@@ -255,7 +265,10 @@ const Auth = () => {
                   Already have an account?{" "}
                   <button 
                     type="button" 
-                    onClick={() => setMode('login')}
+                    onClick={() => {
+                      setMode('login');
+                      setAuthError(null);
+                    }}
                     className="text-pathway-green hover:underline font-medium"
                   >
                     Sign In
