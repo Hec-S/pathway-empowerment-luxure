@@ -1,11 +1,56 @@
 
 import { useAnimateOnScroll } from '@/utils/animations';
 import { Quote, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const SuccessStories = () => {
   const animationRef = useAnimateOnScroll();
   const [activeIndex, setActiveIndex] = useState(0);
+  const isMobile = useIsMobile();
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe) {
+      nextStory();
+    } else if (isRightSwipe) {
+      prevStory();
+    }
+  };
+  
+  // Add keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        prevStory();
+      } else if (e.key === 'ArrowRight') {
+        nextStory();
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
   
   const stories = [
     {
@@ -62,12 +107,19 @@ const SuccessStories = () => {
         
         <div className="max-w-4xl mx-auto relative">
           <div 
+            ref={sliderRef}
             className={`rounded-xl shadow-card overflow-hidden reveal-animation ${stories[activeIndex].background} border ${stories[activeIndex].border}`}
             data-animation="animate-scale"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            tabIndex={0}
+            role="region"
+            aria-label="Success stories carousel"
           >
             <div className="flex flex-col md:flex-row">
-              <div className="w-full md:w-2/5">
-                <div className="relative h-64 md:h-full">
+              <div className={`${isMobile ? 'w-full' : 'w-2/5'}`}>
+                <div className={`relative ${isMobile ? 'h-48' : 'h-64 md:h-full'}`}>
                   <img 
                     src={stories[activeIndex].image} 
                     alt={stories[activeIndex].name} 
@@ -77,12 +129,12 @@ const SuccessStories = () => {
                 </div>
               </div>
               
-              <div className="w-full md:w-3/5 p-8">
+              <div className={`w-full ${isMobile ? 'p-6' : 'md:w-3/5 p-8'}`}>
                 <div className="mb-6">
                   <Quote className="w-10 h-10 text-pathway-green opacity-20" />
                 </div>
                 
-                <blockquote className="text-lg text-pathway-mediumGray mb-6">
+                <blockquote className={`${isMobile ? 'text-base' : 'text-lg'} text-pathway-mediumGray mb-6`}>
                   "{stories[activeIndex].quote}"
                 </blockquote>
                 
@@ -102,21 +154,45 @@ const SuccessStories = () => {
             </div>
           </div>
           
-          <div className="flex justify-between mt-8">
+          {/* Story pagination indicators */}
+          <div className="flex justify-center mt-6 mb-2">
+            {stories.map((_, index) => (
+              <button
+                key={index}
+                className={`mx-1 w-2 h-2 rounded-full transition-all ${
+                  index === activeIndex ? 'bg-pathway-green w-6' : 'bg-pathway-silver'
+                }`}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Go to story ${index + 1}`}
+              />
+            ))}
+          </div>
+          
+          {/* Navigation buttons - hidden on mobile (using swipe instead) */}
+          <div className={`${isMobile ? 'hidden' : 'flex'} justify-between mt-4`}>
             <button 
-              className="p-3 rounded-full bg-white shadow-subtle hover:bg-pathway-offWhite"
+              className="p-3 rounded-full bg-white shadow-subtle hover:bg-pathway-offWhite focus:outline-none focus:ring-2 focus:ring-pathway-green"
               onClick={prevStory}
+              aria-label="Previous story"
             >
               <ChevronLeft className="w-5 h-5 text-pathway-navy" />
             </button>
             
             <button 
-              className="p-3 rounded-full bg-white shadow-subtle hover:bg-pathway-offWhite"
+              className="p-3 rounded-full bg-white shadow-subtle hover:bg-pathway-offWhite focus:outline-none focus:ring-2 focus:ring-pathway-green"
               onClick={nextStory}
+              aria-label="Next story"
             >
               <ChevronRight className="w-5 h-5 text-pathway-navy" />
             </button>
           </div>
+          
+          {/* Swipe instruction for mobile */}
+          {isMobile && (
+            <p className="text-center text-xs text-pathway-mediumGray mt-4">
+              Swipe left or right to navigate stories
+            </p>
+          )}
         </div>
         
         <div className="mt-16 text-center reveal-animation" data-animation="animate-fade-in">

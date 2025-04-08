@@ -1,6 +1,9 @@
-import { ArrowRight, Star } from 'lucide-react';
+import { ArrowRight, Star, ChevronDown } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
 const Hero = () => {
-  return <section className="relative min-h-screen flex items-center bg-gradient-to-b from-pathway-navy to-pathway-dark text-white pt-20 overflow-hidden">
+  const isMobile = useIsMobile();
+  return <section className="relative min-h-screen flex items-center bg-black text-white pt-20 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-[10%] left-[15%] w-64 h-64 rounded-full bg-pathway-green opacity-5 animate-float"></div>
@@ -27,22 +30,42 @@ const Hero = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start animate-fade-in stagger-2">
-              <button className="btn-primary flex items-center justify-center gap-2">
+              <Link to="/assessment" className="btn-primary flex items-center justify-center gap-2">
                 Start Free Assessment
                 <ArrowRight size={18} />
-              </button>
+              </Link>
               
             </div>
             
             <div className="mt-12 flex items-center gap-6 justify-center md:justify-start animate-fade-in stagger-3">
-              
               <p className="text-sm text-pathway-silver">
                 Joined by <span className="font-semibold">150+</span> students this month
               </p>
             </div>
           </div>
+          
+          {/* Right side image for desktop */}
+          <div className="hidden md:block w-2/5 relative">
+            <div className="absolute inset-0 bg-pathway-green bg-opacity-10 rounded-lg overflow-hidden">
+              <div className="absolute top-[10%] right-[10%] w-32 h-32 rounded-full bg-pathway-green opacity-10 animate-float"></div>
+              <div className="absolute bottom-[20%] left-[10%] w-48 h-48 rounded-full bg-pathway-lightGreen opacity-10 animate-float" style={{
+                animationDelay: '1.5s'
+              }}></div>
+            </div>
+          </div>
         </div>
       </div>
+      
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+        <a href="#discover" className="flex flex-col items-center text-pathway-silver hover:text-white transition-colors">
+          <span className="text-xs mb-2">Scroll to explore</span>
+          <ChevronDown size={20} />
+        </a>
+      </div>
+      
+      {/* Mobile-optimized padding to account for bottom navigation */}
+      {isMobile && <div className="h-16"></div>}
     </section>;
 };
 export default Hero;
