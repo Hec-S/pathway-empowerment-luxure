@@ -177,6 +177,7 @@ const Auth = () => {
                           className="pl-10" 
                           placeholder="johndoe123" 
                           {...field} 
+                          value={field.value || ""}
                         />
                       </div>
                     </FormControl>
